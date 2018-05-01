@@ -29,9 +29,10 @@ class ViewController: UIViewController {
     var cardTitles = ["🎃", "👻", "🎃", "👻"]
     
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.index(of: sender) {
-            game.chooseCard(at: cardNumber)
+            if game.chooseCard(at: cardNumber) {
+                flipCount += 1
+            }
             updateViewFromModel()
         } else {
             print("Card not found in cardTitles")
