@@ -12,6 +12,8 @@ class Concentration {
     var cards = [Card]()
     
     var indexOfOneAndOnlyFaceUpCard: Int?
+    var previouslyMismatchedCardsIndex = [Int]()
+    var score = 0
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {
@@ -19,7 +21,13 @@ class Concentration {
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
-                 }
+                    scoreMatchedCard()
+                } else {
+                    scoreCurrentMismatchedCard(withIndex: matchIndex)
+                    scoreCurrentMismatchedCard(withIndex: index)
+                    addToPreviouslyMismatchedCards(withIndex: matchIndex)
+                    addToPreviouslyMismatchedCards(withIndex: index)
+                }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = nil
             } else {
@@ -33,14 +41,41 @@ class Concentration {
         }
     }
     
-    func resetCards(withPairCount numberOfPairsOfCards: Int) {
+    func addToPreviouslyMismatchedCards(withIndex index: Int) {
+        if !previouslyMismatchedCardsIndex.contains(index) {
+            previouslyMismatchedCardsIndex += [index]
+        }
+    }
+    
+    func scoreCurrentMismatchedCard(withIndex index: Int) {
+        if previouslyMismatchedCardsIndex.contains(index) {
+           score -= 1
+        }
+    }
+    
+    func scoreMatchedCard() {
+        score += 2
+    }
+    
+    func reset(withPairCount numberOfPairsOfCards: Int) {
+        //reset Card identifiers so that they start from scratch.
         Card.resetIdentifiers()
+        
+        //reset cards
         cards = [Card]()
         for _ in 1...numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
         }
+        
+        //shuffle cards
         shuffleCards()
+        
+        //reset previously mismatched cards
+        previouslyMismatchedCardsIndex = [Int]()
+        
+        //reset score
+        score = 0
     }
     
     func shuffleCards() {
@@ -53,6 +88,6 @@ class Concentration {
     }
     
     init(numberOfPairsOfCards: Int) {
-        resetCards(withPairCount: numberOfPairsOfCards)
+        reset(withPairCount: numberOfPairsOfCards)
     }
 }

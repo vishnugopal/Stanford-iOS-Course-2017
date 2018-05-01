@@ -144,12 +144,20 @@
                                     <action selector="newGame" destination="BYZ-38-t0r" eventType="touchUpInside" id="5E3-u6-96b"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sG6-2V-7ae">
+                                <rect key="frame" x="16" y="510" width="343" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="flipCountLabel" destination="XMv-dK-BBt" id="FQP-OG-qLv"/>
+                        <outlet property="scoreLabel" destination="sG6-2V-7ae" id="zCl-bo-etz"/>
                         <outletCollection property="cardButtons" destination="bVu-hC-4Dt" collectionClass="NSMutableArray" id="lL2-O0-qBX"/>
                         <outletCollection property="cardButtons" destination="Q5P-jc-2fj" collectionClass="NSMutableArray" id="2Lf-dD-4Ro"/>
                         <outletCollection property="cardButtons" destination="oZ4-9a-2UT" collectionClass="NSMutableArray" id="57h-RY-q7V"/>

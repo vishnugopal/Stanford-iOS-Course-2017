@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var flipCountLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
     var numberOfPairsOfCardsInGame: Int {
         get {
@@ -38,7 +39,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func newGame() {
-        game.resetCards(withPairCount: numberOfPairsOfCardsInGame)
+        game.reset(withPairCount: numberOfPairsOfCardsInGame)
         flipCount = 0
         randomizeEmojiTheme()
         updateViewFromModel()
@@ -57,6 +58,7 @@ class ViewController: UIViewController {
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             }
         }
+        scoreLabel.text = "Score: \(game.score)"
     }
     
     func randomizeEmojiTheme() {
