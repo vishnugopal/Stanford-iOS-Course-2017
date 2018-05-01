@@ -40,6 +40,7 @@ class ViewController: UIViewController {
     @IBAction func newGame() {
         game.resetCards(withPairCount: numberOfPairsOfCardsInGame)
         flipCount = 0
+        randomizeEmojiTheme()
         updateViewFromModel()
     }
     
@@ -58,7 +59,29 @@ class ViewController: UIViewController {
         }
     }
     
-    var emojiChoices = ["🎃", "👻", "😷", "👽", "🤡", "🤖", "🧠", "👹", "🐞"]
+    func randomizeEmojiTheme() {
+        //reset Emoji placeholders for each button
+        emoji = [Int: String]()
+        
+        //randomize emojiChoices by selecting a random theme
+        emojiChoices = emojiChoicesWithARandomTheme()
+    }
+    
+    func emojiChoicesWithARandomTheme() -> [String] {
+        let themes = Array(emojiThemes.keys)
+        let randomIndex = Int(arc4random_uniform(UInt32(themes.count)))
+        return emojiThemes[themes[randomIndex]]!
+    }
+    
+    var emojiThemes = ["animals": ["🐼", "🐔", "🦄", "🐧", "🐦", "🐤", "🐣", "🦆", "🦉"],
+                       "sports": ["🏀", "🏈", "⚾", "⚽️", "🎾", "🏉", "🎱", "🥊", "⛷"],
+                       "faces": ["😀", "😢", "😉", "☺️", "😘", "😝", "😣", "😡", "😨"],
+                       "hands": ["🤲", "👏", "👍", "👎", "👊", "👌","💪", "🖕", "🙏"],
+                       "food": ["🍏", "🍎", "🍋", "🍉", "🍇", "🍍","🍆", "🥕", "🌽"],
+                       "symbols": ["💟", "✝️", "🕉", "✡️", "☯️", "♊️","♎️", "♓️", "⚛️"]
+    ]
+    
+    lazy var emojiChoices = emojiChoicesWithARandomTheme()
     
     var emoji = [Int: String]()
     
