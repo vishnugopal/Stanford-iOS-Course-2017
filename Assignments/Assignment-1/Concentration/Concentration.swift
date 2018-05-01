@@ -33,11 +33,17 @@ class Concentration {
         }
     }
     
-    init(numberOfPairsOfCards: Int) {
+    func resetCards(withPairCount numberOfPairsOfCards: Int) {
+        Card.resetIdentifiers()
+        cards = [Card]()
         for _ in 1...numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
         }
         // TODO: Shuffle the cards.
+    }
+    
+    init(numberOfPairsOfCards: Int) {
+        resetCards(withPairCount: numberOfPairsOfCards)
     }
 }

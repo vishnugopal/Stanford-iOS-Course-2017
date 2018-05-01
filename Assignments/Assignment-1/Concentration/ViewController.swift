@@ -12,7 +12,13 @@ class ViewController: UIViewController {
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var flipCountLabel: UILabel!
     
-    lazy var game = Concentration(numberOfPairsOfCards:  (cardButtons.count + 1) / 2)
+    var numberOfPairsOfCardsInGame: Int {
+        get {
+            return(cardButtons.count + 1) / 2
+        }
+    }
+    
+    lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCardsInGame)
     
     var flipCount = 0 {
         didSet {
@@ -30,6 +36,13 @@ class ViewController: UIViewController {
             print("Card not found in cardTitles")
         }
     }
+    
+    @IBAction func newGame() {
+        game.resetCards(withPairCount: numberOfPairsOfCardsInGame)
+        flipCount = 0
+        updateViewFromModel()
+    }
+    
     
     func updateViewFromModel() {
         for index in cardButtons.indices {
