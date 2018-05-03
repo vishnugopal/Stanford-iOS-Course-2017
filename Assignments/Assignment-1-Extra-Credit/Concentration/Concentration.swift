@@ -15,6 +15,8 @@ class Concentration {
     var previouslyMismatchedCardsIndex = [Int]()
     var score = 0
     var flips = 0
+    var currentCardChosenTime = Date()
+    var timeSinceLastCardMatched = TimeInterval()
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {
@@ -23,6 +25,7 @@ class Concentration {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     scoreMatchedCard()
+                    recordAndAdjustScoresBasedOnTimeSinceLastCardMatched()
                 } else {
                     scoreCurrentMismatchedCard(withIndex: matchIndex)
                     scoreCurrentMismatchedCard(withIndex: index)
@@ -57,6 +60,22 @@ class Concentration {
     
     func scoreMatchedCard() {
         score += 2
+    }
+    
+    func recordAndAdjustScoresBasedOnTimeSinceLastCardMatched() {
+        timeSinceLastCardMatched = Date().timeIntervalSince(currentCardChosenTime)
+        currentCardChosenTime = Date()
+
+        if timeSinceLastCardMatched < 3 {
+            print("Time less than 3 seconds")
+            score += 3
+        } else if timeSinceLastCardMatched < 5 {
+            print("Time less than 5 seconds")
+            score += 2
+        } else if timeSinceLastCardMatched < 10 {
+            print("Time less than 10 seconds")
+            score += 1
+        }
     }
     
     func reset(withPairCount numberOfPairsOfCards: Int) {

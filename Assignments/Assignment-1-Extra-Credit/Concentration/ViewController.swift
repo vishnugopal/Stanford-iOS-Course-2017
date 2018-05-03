@@ -75,7 +75,6 @@ class ViewController: UIViewController {
     
     func randomizeTheme() -> Theme {
         let randomIndex = Int(arc4random_uniform(UInt32(themeChoices.count)))
-        print(randomIndex)
         
         //FIXME: Ugly hack because we still don't know how to do proper property initialization
         currentTheme = themeChoices[randomIndex]
