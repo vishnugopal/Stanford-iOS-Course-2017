@@ -14,8 +14,9 @@ class Concentration {
     var indexOfOneAndOnlyFaceUpCard: Int?
     var previouslyMismatchedCardsIndex = [Int]()
     var score = 0
+    var flips = 0
     
-    func chooseCard(at index: Int) -> Bool {
+    func chooseCard(at index: Int) {
         if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 if cards[matchIndex].identifier == cards[index].identifier {
@@ -38,9 +39,7 @@ class Concentration {
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
-            return true
-        } else {
-            return false
+            flips += 1
         }
     }
     
@@ -79,6 +78,9 @@ class Concentration {
         
         //reset score
         score = 0
+        
+        //reset flips
+        flips = 0
     }
     
     func shuffleCards() {

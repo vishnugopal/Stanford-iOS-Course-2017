@@ -21,18 +21,11 @@ class ViewController: UIViewController {
     
     lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCardsInGame)
     
-    var flipCount = 0 {
-        didSet {
-            flipCountLabel.text = "Flips: \(flipCount)"
-        }
-    }
     var cardTitles = ["🎃", "👻", "🎃", "👻"]
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
-            if game.chooseCard(at: cardNumber) {
-                flipCount += 1
-            }
+            game.chooseCard(at: cardNumber)
             updateViewFromModel()
         } else {
             print("Card not found in cardTitles")
@@ -41,7 +34,6 @@ class ViewController: UIViewController {
     
     @IBAction func newGame() {
         game.reset(withPairCount: numberOfPairsOfCardsInGame)
-        flipCount = 0
         randomizeEmojiTheme()
         updateViewFromModel()
     }
@@ -60,6 +52,7 @@ class ViewController: UIViewController {
             }
         }
         scoreLabel.text = "Score: \(game.score)"
+        flipCountLabel.text = "Flips: \(game.flips)"
     }
     
     func randomizeEmojiTheme() {
