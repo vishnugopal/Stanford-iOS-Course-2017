@@ -97,6 +97,7 @@ class ViewController: UIViewController {
     private func updateUI() {
         /* hide all cards first */
         for cardButton in cardButtons {
+            cardButton.setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
             cardButton.layer.borderWidth = 0.0
         }
@@ -113,6 +114,15 @@ class ViewController: UIViewController {
             if let index = game.cardsInPlay.index(of: card) {
                 cardButtons[index].layer.borderWidth = 3.0
                 cardButtons[index].layer.borderColor = game.inMatchedState ? #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1) : #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+            }
+        }
+        
+        /* hide already matched */
+        for card in game.matchedCards {
+            if let index = game.cardsInPlay.index(of: card) {
+                cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
+                cardButtons[index].backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
+                cardButtons[index].layer.borderWidth = 0.0
             }
         }
     }

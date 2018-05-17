@@ -12,6 +12,7 @@ struct SetGame {
     var deck = [Card]()
     var cardsInPlay = [Card]()
     var selectedCards = [Card]()
+    var matchedCards = [Card]()
     
     private let playingDeckMaxSize: Int
     private let initialDealSize: Int
@@ -20,6 +21,7 @@ struct SetGame {
         if (selectedCards.count < 3) {
             return false
         }
+        
         let card1 = selectedCards[0];
         let card2 = selectedCards[1];
         let card3 = selectedCards[2];
@@ -31,10 +33,16 @@ struct SetGame {
     }
     
     mutating func selectCard(byIndex index: Int) {
+        /* If an index is passed outside cards currently in play, do nothing */
         if index >= cardsInPlay.count {
             return
         }
         
+        /* If the card is already matched, do nothing*/
+        if matchedCards.contains(cardsInPlay[index]) {
+            return
+        }
+
         if inMatchedState {
             dealThreeCards()
         }
@@ -52,8 +60,11 @@ struct SetGame {
     mutating func dealThreeCards() {
         if inMatchedState {
             for selectedCard in selectedCards {
+                matchedCards.append(selectedCard)
                 if let index = cardsInPlay.index(of: selectedCard) {
-                    cardsInPlay[index] = removeCardFromDeck()
+                    if deck.count > 0 {
+                        cardsInPlay[index] = removeCardFromDeck()
+                    }
                 }
             }
             
@@ -109,6 +120,7 @@ struct SetGame {
         deck = [Card]()
         cardsInPlay = [Card]()
         selectedCards = [Card]()
+        matchedCards = [Card]()
         populateDeckWithFreshSetGameCards()
         populateInitialPlayingCards()
     }
