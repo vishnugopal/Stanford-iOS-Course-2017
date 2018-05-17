@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5297F6820AD2F8F0081F401 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5297F6720AD2F8F0081F401 /* Card.swift */; };
+		F5297F6A20AD48FA0081F401 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5297F6920AD48FA0081F401 /* SetGame.swift */; };
 		F53F5FF620AD2ED600F3224D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F5FF520AD2ED600F3224D /* AppDelegate.swift */; };
 		F53F5FF820AD2ED600F3224D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F5FF720AD2ED600F3224D /* ViewController.swift */; };
 		F53F5FFB20AD2ED600F3224D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53F5FF920AD2ED600F3224D /* Main.storyboard */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F5297F6720AD2F8F0081F401 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Card.swift; path = SetGame/Card.swift; sourceTree = SOURCE_ROOT; };
+		F5297F6920AD48FA0081F401 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SetGame.swift; path = SetGame/SetGame.swift; sourceTree = SOURCE_ROOT; };
 		F53F5FF220AD2ED600F3224D /* SetGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SetGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F53F5FF520AD2ED600F3224D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F53F5FF720AD2ED600F3224D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -41,6 +45,8 @@
 				F53F5FF520AD2ED600F3224D /* AppDelegate.swift */,
 				F53F5FFC20AD2ED800F3224D /* Assets.xcassets */,
 				F53F5FFE20AD2ED800F3224D /* LaunchScreen.storyboard */,
+				F5297F6720AD2F8F0081F401 /* Card.swift */,
+				F5297F6920AD48FA0081F401 /* SetGame.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -144,6 +150,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F53F5FF820AD2ED600F3224D /* ViewController.swift in Sources */,
+				F5297F6820AD2F8F0081F401 /* Card.swift in Sources */,
+				F5297F6A20AD48FA0081F401 /* SetGame.swift in Sources */,
 				F53F5FF620AD2ED600F3224D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
