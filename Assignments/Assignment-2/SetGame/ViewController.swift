@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     lazy private var game = SetGame(initialDealSize: 12, playingDeckMaxSize: cardButtons.count)
     
     @IBOutlet var cardButtons: [UIButton]!
+    @IBOutlet weak var dealButton: UIButton!
     
     override func viewDidLoad() {
         updateUI()
@@ -40,47 +41,40 @@ class ViewController: UIViewController {
         
         /* symbol is one of three things based on card.symbol state */
         switch card.symbol {
-        case 1:
+        case .alpha:
             symbol = "▲"
-        case 2:
+        case .beta:
             symbol = "●"
-        case 3:
+        case .gamma:
             symbol = "■"
-        default:
-            symbol = ""
         }
         
         /* Repeat symbol number times */
-        symbol = String(repeating: symbol, count: card.number)
+        symbol = String(repeating: symbol, count: card.number.rawValue)
         
         /* foregroundColor & strokeColor is one of three things based on card.color */
         switch card.color {
-        case 1:
+        case .alpha:
             foregroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
             strokeColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-        case 2:
+        case .beta:
             foregroundColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
             strokeColor = #colorLiteral(red: 0, green: 0.9768045545, blue: 0, alpha: 1)
-        case 3:
+        case .gamma:
             foregroundColor = #colorLiteral(red: 0.5791940689, green: 0.1280144453, blue: 0.5726861358, alpha: 1)
             strokeColor = #colorLiteral(red: 0.5791940689, green: 0.1280144453, blue: 0.5726861358, alpha: 1)
-        default:
-            foregroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-            strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         }
         
         /* shading is depicted by a combination of foregroundColor, strokeWidth & strokeColor */
         switch card.shading {
-        case 1: /* striped */
+        case .alpha: /* striped */
             foregroundColor = foregroundColor.withAlphaComponent(0.15)
             strokeColor = foregroundColor
             strokeWidth = -2
-        case 2: /* filled */
+        case .beta: /* filled */
             strokeWidth = -2
-        case 3: /* outline */
+        case .gamma: /* outline */
             strokeWidth = +5
-        default:
-            strokeWidth = 0
         }
         
         let attributedStringKeys: [NSAttributedStringKey: Any] = [
@@ -95,7 +89,8 @@ class ViewController: UIViewController {
     }
     
     private func updateUI() {
-        /* hide all cards first */
+        /* let's reset all state first */
+        dealButton.isEnabled = true
         for cardButton in cardButtons {
             cardButton.setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
@@ -124,6 +119,11 @@ class ViewController: UIViewController {
                 cardButtons[index].backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
                 cardButtons[index].layer.borderWidth = 0.0
             }
+        }
+        
+        /* hide deal card button */
+        if !game.canDeal {
+            dealButton.isEnabled = false
         }
     }
 }

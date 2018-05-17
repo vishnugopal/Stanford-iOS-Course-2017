@@ -25,11 +25,19 @@ struct SetGame {
         let card1 = selectedCards[0];
         let card2 = selectedCards[1];
         let card3 = selectedCards[2];
+        
         if card1.matchesPair(first: card2, second: card3) {
             return true
         } else {
-            return false;
+            return false
         }
+    }
+    
+    var canDeal: Bool {
+        let cannotDeal = /* You cannot deal 3 new cards if: */
+            (deck.count == 0 && cardsInPlay.count != 0) /* 1. deck is empty & cardsInPlay is not empty */ ||
+                ((cardsInPlay.count == playingDeckMaxSize) && !inMatchedState) /* or: 2. there are enough cards in play, and you are not matched */
+        return !cannotDeal
     }
     
     mutating func selectCard(byIndex index: Int) {
@@ -38,20 +46,29 @@ struct SetGame {
             return
         }
         
-        /* If the card is already matched, do nothing*/
+        /* If the card is already matched, do nothing */
         if matchedCards.contains(cardsInPlay[index]) {
             return
         }
+        
+        /* If the card is already selected, deselect it */
+        if selectedCards.count < 3, let selectedIndex = selectedCards.index(of: cardsInPlay[index]) {
+            selectedCards.remove(at: selectedIndex)
+            return
+        }
 
+        /* Automatically deal three cards before proceeding if in matched state */
         if inMatchedState {
             dealThreeCards()
         }
         
+        /* If 3 cards are selected, reset selection */
         if selectedCards.count >= 3 {
             // clear selected cards
             selectedCards = [Card]()
         }
         
+        /* Add current card to selected cards */
         if !selectedCards.contains(cardsInPlay[index]) {
             selectedCards.append(cardsInPlay[index])
         }
@@ -81,6 +98,15 @@ struct SetGame {
         assert(cardsInPlay.count <= playingDeckMaxSize, "dealThreeCards(): more cards in play than max playing deck size")
     }
     
+    mutating func reset() {
+        deck = [Card]()
+        cardsInPlay = [Card]()
+        selectedCards = [Card]()
+        matchedCards = [Card]()
+        populateDeckWithFreshSetGameCards()
+        populateInitialPlayingCards()
+    }
+    
     private mutating func removeCardFromDeck() -> Card {
         assert(deck.count > 0, "removeCardFromDeck(): with an empty deck")
         return deck.removeFirst()
@@ -88,10 +114,10 @@ struct SetGame {
     
     private mutating func populateDeckWithFreshSetGameCards() {
         deck = [Card]()
-        for number in 1...3 {
-            for symbol in 1...3 {
-                for shading in 1...3 {
-                    for color in 1...3 {
+        for number in CardState.all {
+            for symbol in CardState.all {
+                for shading in CardState.all {
+                    for color in CardState.all {
                         let card = Card(number: number, symbol: symbol, shading: shading, color: color)
                         deck.append(card)
                     }
@@ -114,15 +140,6 @@ struct SetGame {
         repeat {
             dealThreeCards()
         } while cardsInPlay.count < initialDealSize
-    }
-    
-    mutating func reset() {
-        deck = [Card]()
-        cardsInPlay = [Card]()
-        selectedCards = [Card]()
-        matchedCards = [Card]()
-        populateDeckWithFreshSetGameCards()
-        populateInitialPlayingCards()
     }
     
     init(initialDealSize: Int, playingDeckMaxSize: Int) {
