@@ -13,6 +13,12 @@ class ViewController: UIViewController {
     
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var dealButton: UIButton!
+    @IBOutlet weak var scoreLabel: UILabel!
+    
+    @IBAction func newGame() {
+        game.reset()
+        updateUI()
+    }
     
     override func viewDidLoad() {
         updateUI()
@@ -91,10 +97,12 @@ class ViewController: UIViewController {
     private func updateUI() {
         /* let's reset all state first */
         dealButton.isEnabled = true
+        scoreLabel.text = "Score: 0"
         for cardButton in cardButtons {
             cardButton.setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
             cardButton.layer.borderWidth = 0.0
+            
         }
         
         /* now show only those cards that are in play */
@@ -125,6 +133,9 @@ class ViewController: UIViewController {
         if !game.canDeal {
             dealButton.isEnabled = false
         }
+        
+        /* Correct score */
+        scoreLabel.text = "Score: \(game.score)"
     }
 }
 

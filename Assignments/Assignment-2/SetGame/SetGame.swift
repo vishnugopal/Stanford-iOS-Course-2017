@@ -17,6 +17,11 @@ struct SetGame {
     private let playingDeckMaxSize: Int
     private let initialDealSize: Int
     
+    /* A count of moves, matches and mismatches to calculate score */
+    private var moves = 0
+    private var matches = 0
+    private var misMatches = 0
+    
     var inMatchedState: Bool {
         if (selectedCards.count < 3) {
             return false
@@ -40,6 +45,11 @@ struct SetGame {
         return !cannotDeal
     }
     
+    /* Heavily weighed towards matches because game makes it very hard to find a match */
+    var score: Int {
+        return (matches * 20) - (misMatches * 2) - moves
+    }
+    
     mutating func selectCard(byIndex index: Int) {
         /* If an index is passed outside cards currently in play, do nothing */
         if index >= cardsInPlay.count {
@@ -51,15 +61,21 @@ struct SetGame {
             return
         }
         
-        /* If the card is already selected, deselect it */
+        /* If the card is already selected, and if number of selected cards < 3, deselect it */
         if selectedCards.count < 3, let selectedIndex = selectedCards.index(of: cardsInPlay[index]) {
             selectedCards.remove(at: selectedIndex)
             return
         }
+        
+        /* If there's a move, increment moves */
+        moves += 1
 
         /* Automatically deal three cards before proceeding if in matched state */
         if inMatchedState {
+            matches += 1
             dealThreeCards()
+        } else if (selectedCards.count == 3) {
+            misMatches += 1
         }
         
         /* If 3 cards are selected, reset selection */
@@ -105,6 +121,13 @@ struct SetGame {
         matchedCards = [Card]()
         populateDeckWithFreshSetGameCards()
         populateInitialPlayingCards()
+        resetMoves()
+    }
+    
+    private mutating func resetMoves() {
+        moves = 0
+        matches = 0
+        misMatches = 0
     }
     
     private mutating func removeCardFromDeck() -> Card {
