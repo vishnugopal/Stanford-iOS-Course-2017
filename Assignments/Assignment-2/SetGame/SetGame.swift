@@ -23,6 +23,8 @@ struct SetGame {
     private var misMatches = 0
     
     var inMatchedState: Bool {
+        //uncomment for easier testing
+        //return Card.isSet(selectedCards, simulateMatch: true)
         return Card.isSet(selectedCards)
     }
     

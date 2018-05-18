@@ -42,9 +42,13 @@ struct Card: Hashable, Equatable {
     var shading: CardShading
     var color: CardColor
     
-    static func isSet(_ cards: [Card]) -> Bool {
+    static func isSet(_ cards: [Card], simulateMatch: Bool = false) -> Bool {
         if cards.count < 3 {
             return false
+        }
+        
+        if simulateMatch {
+            return true
         }
         
         let first = cards[0]
