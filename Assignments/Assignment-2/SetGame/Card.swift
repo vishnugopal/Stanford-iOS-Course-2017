@@ -51,8 +51,6 @@ struct Card: Hashable, Equatable {
         let second = cards[1]
         let third = cards[2]
         
-        return true
-        
         var numbersFollowMatchingRule = false
         var symbolsFollowMatchingRule = false
         var shadingFollowMatchingRule = false
