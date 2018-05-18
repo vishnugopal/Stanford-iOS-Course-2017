@@ -9,21 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
+    //MARK: Model
+    
     lazy private var game = SetGame(initialDealSize: 12, playingDeckMaxSize: cardButtons.count)
+    
+    //MARK: Outlets
     
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
     
+    //MARK: Labels
+
     @IBAction func newGame() {
         game.reset()
         updateUI()
     }
     
-    override func viewDidLoad() {
-        updateUI()
-    }
-
     @IBAction func dealThreeCards() {
         game.dealThreeCards()
         updateUI()
@@ -37,7 +39,17 @@ class ViewController: UIViewController {
         }
         updateUI()
     }
+
+    //MARK: Overrides
     
+    override func viewDidLoad() {
+        updateUI()
+    }
+    
+    //MARK: Public Functions
+    
+    //MARK: Private Functions
+
     private func getAttributedString(forCard card:Card) -> NSAttributedString {
         var symbol: String
         var foregroundColor: UIColor
@@ -102,7 +114,6 @@ class ViewController: UIViewController {
             cardButton.setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
             cardButton.layer.borderWidth = 0.0
-            
         }
         
         /* now show only those cards that are in play */

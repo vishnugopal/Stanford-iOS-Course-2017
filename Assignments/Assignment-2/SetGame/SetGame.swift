@@ -23,25 +23,13 @@ struct SetGame {
     private var misMatches = 0
     
     var inMatchedState: Bool {
-        if (selectedCards.count < 3) {
-            return false
-        }
-        
-        let card1 = selectedCards[0];
-        let card2 = selectedCards[1];
-        let card3 = selectedCards[2];
-        
-        if card1.matchesPair(first: card2, second: card3) {
-            return true
-        } else {
-            return false
-        }
+        return Card.isSet(selectedCards)
     }
     
     var canDeal: Bool {
         let cannotDeal = /* You cannot deal 3 new cards if: */
-            (deck.count == 0 && cardsInPlay.count != 0) /* 1. deck is empty & cardsInPlay is not empty */ ||
-                ((cardsInPlay.count == playingDeckMaxSize) && !inMatchedState) /* or: 2. there are enough cards in play, and you are not matched */
+            (deck.count == 0) /* 1. deck is empty */
+                || ((cardsInPlay.count == playingDeckMaxSize) && !inMatchedState) /* or: 2. the play deck is full, and you are not matched */
         return !cannotDeal
     }
     
@@ -67,7 +55,7 @@ struct SetGame {
             return
         }
         
-        /* If there's a move, increment moves */
+        /* Increment moves */
         moves += 1
 
         /* Automatically deal three cards before proceeding if in matched state */
@@ -92,18 +80,17 @@ struct SetGame {
     
     mutating func dealThreeCards() {
         if inMatchedState {
-            for selectedCard in selectedCards {
-                matchedCards.append(selectedCard)
-                if let index = cardsInPlay.index(of: selectedCard) {
-                    if deck.count > 0 {
-                        cardsInPlay[index] = removeCardFromDeck()
-                    }
+            cardsInPlay = cardsInPlay.map { if selectedCards.contains($0) {
+                    return deck.count > 0 ? removeCardFromDeck(): $0
+                } else {
+                    return $0
                 }
             }
             
             // clear selected cards
             selectedCards = [Card]()
         } else {
+            /* Remove number cards from deck where number is: 1. is less than the playingDeckMaxSize, and 2. less than the deck size */
             var cardsToRemove = (playingDeckMaxSize - cardsInPlay.count) > 3 ? 3: (playingDeckMaxSize - cardsInPlay.count)
             cardsToRemove = cardsToRemove > deck.count ? deck.count: cardsToRemove
             
@@ -115,12 +102,12 @@ struct SetGame {
     }
     
     mutating func reset() {
-        deck = [Card]()
-        cardsInPlay = [Card]()
+        deck = Card.newShuffledDeck()
+        populateInitialPlayingCards()
+        
         selectedCards = [Card]()
         matchedCards = [Card]()
-        populateDeckWithFreshSetGameCards()
-        populateInitialPlayingCards()
+        
         resetMoves()
     }
     
@@ -135,31 +122,8 @@ struct SetGame {
         return deck.removeFirst()
     }
     
-    private mutating func populateDeckWithFreshSetGameCards() {
-        deck = [Card]()
-        for number in CardState.all {
-            for symbol in CardState.all {
-                for shading in CardState.all {
-                    for color in CardState.all {
-                        let card = Card(number: number, symbol: symbol, shading: shading, color: color)
-                        deck.append(card)
-                    }
-                }
-            }
-        }
-        shuffleDeck()
-    }
-    
-    private mutating func shuffleDeck() {
-        var newDeck = [Card]()
-        while deck.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(deck.count)))
-            newDeck += [deck.remove(at: randomIndex)]
-        }
-        deck = newDeck
-    }
-    
     private mutating func populateInitialPlayingCards() {
+        cardsInPlay = [Card]()
         repeat {
             dealThreeCards()
         } while cardsInPlay.count < initialDealSize
@@ -168,7 +132,6 @@ struct SetGame {
     init(initialDealSize: Int, playingDeckMaxSize: Int) {
         self.initialDealSize = initialDealSize
         self.playingDeckMaxSize = playingDeckMaxSize
-        populateDeckWithFreshSetGameCards()
-        populateInitialPlayingCards()
+        reset()
     }
 }

@@ -42,32 +42,63 @@ struct Card: Hashable, Equatable {
     var shading: CardShading
     var color: CardColor
     
-    func matchesPair(first: Card, second: Card) -> Bool {
+    static func isSet(_ cards: [Card]) -> Bool {
+        if cards.count < 3 {
+            return false
+        }
+        
+        let first = cards[0]
+        let second = cards[1]
+        let third = cards[2]
+        
+        return true
+        
         var numbersFollowMatchingRule = false
         var symbolsFollowMatchingRule = false
         var shadingFollowMatchingRule = false
         var colorsFollowMatchingRule = false
         
         /* Numbers are all the same, or are all different */
-        if self.number.allSameOrAllDifferent(one: first.number, other: second.number) {
+        if third.number.allSameOrAllDifferent(one: first.number, other: second.number) {
             numbersFollowMatchingRule = true
         }
         
         /* Symbols are all the same, or are all different */
-        if self.symbol.allSameOrAllDifferent(one: first.symbol, other: second.symbol) {
+        if third.symbol.allSameOrAllDifferent(one: first.symbol, other: second.symbol) {
             symbolsFollowMatchingRule = true
         }
         
         /* Shading are all the same, or are all different */
-        if self.shading.allSameOrAllDifferent(one: first.shading, other: second.shading) {
+        if third.shading.allSameOrAllDifferent(one: first.shading, other: second.shading) {
             shadingFollowMatchingRule = true
         }
         
         /* Colors are all the same, or are all different */
-        if self.color.allSameOrAllDifferent(one: first.color, other: second.color) {
+        if third.color.allSameOrAllDifferent(one: first.color, other: second.color) {
             colorsFollowMatchingRule = true
         }
         
         return numbersFollowMatchingRule && symbolsFollowMatchingRule && shadingFollowMatchingRule && colorsFollowMatchingRule
+    }
+    
+    static func newShuffledDeck() -> [Card] {
+        var deck = [Card]()
+        for number in CardState.all {
+            for symbol in CardState.all {
+                for shading in CardState.all {
+                    for color in CardState.all {
+                        let card = Card(number: number, symbol: symbol, shading: shading, color: color)
+                        deck.append(card)
+                    }
+                }
+            }
+        }
+        
+        var shuffledDeck = [Card]()
+        while deck.count > 0 {
+            let randomIndex = Int(arc4random_uniform(UInt32(deck.count)))
+            shuffledDeck += [deck.remove(at: randomIndex)]
+        }
+        return shuffledDeck
     }
 }
