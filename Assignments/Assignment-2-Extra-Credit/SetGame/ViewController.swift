@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
     
-    //MARK: Labels
+    //MARK: Actions
 
     @IBAction func newGame() {
         game.reset()
@@ -40,6 +40,26 @@ class ViewController: UIViewController {
         updateUI()
     }
 
+    @IBAction func provideHint() {
+        let possibleSets = Card.findSets(fromCards: game.cardsInPlay)
+        let possibleSet = possibleSets.count > 0 ? possibleSets[0]: nil
+        
+        if let setOfCards = possibleSet {
+            for card in setOfCards {
+                if let index = game.cardsInPlay.index(of: card) {
+                    cardButtons[index].layer.borderWidth = 3.0
+                    cardButtons[index].layer.borderColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+                }
+            }
+        } else {
+            let alert = UIAlertController(title: "No matches!", message: "No matches found, try dealing more cards?.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Deal Cards", comment: "Default action"), style: .`default`, handler: { _ in
+                self.dealThreeCards()
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     //MARK: Overrides
     
     override func viewDidLoad() {

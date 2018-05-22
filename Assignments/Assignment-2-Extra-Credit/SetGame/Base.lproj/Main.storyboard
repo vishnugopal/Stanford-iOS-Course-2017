@@ -225,24 +225,31 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="GCw-qN-dA2">
                                 <rect key="frame" x="16" y="732" width="343" height="30"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9O-lf-rMb">
+                                        <rect key="frame" x="0.0" y="0.0" width="64" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Zb-OT-7TO">
-                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                        <rect key="frame" x="93.333333333333314" y="0.0" width="75" height="30"/>
                                         <state key="normal" title="New Game"/>
                                         <connections>
                                             <action selector="newGame" destination="BYZ-38-t0r" eventType="touchUpInside" id="kzU-ZS-ORJ"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9O-lf-rMb">
-                                        <rect key="frame" x="150.66666666666666" y="0.0" width="64" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZS-gp-Cmj">
-                                        <rect key="frame" x="312" y="0.0" width="31" height="30"/>
+                                        <rect key="frame" x="214" y="0.0" width="31" height="30"/>
                                         <state key="normal" title="Deal"/>
                                         <connections>
                                             <action selector="dealThreeCards" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rgj-h6-95G"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8zd-FX-Qq4">
+                                        <rect key="frame" x="313" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="Hint"/>
+                                        <connections>
+                                            <action selector="provideHint" destination="BYZ-38-t0r" eventType="touchUpInside" id="t3x-jW-spo"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -256,6 +263,7 @@
                             <constraint firstItem="GCw-qN-dA2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ZBg-hZ-nbk"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1iO-Lh-irQ" secondAttribute="trailing" constant="16" id="dSi-FO-4vm"/>
                             <constraint firstItem="1iO-Lh-irQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="sny-Hp-QcH"/>
+                            <constraint firstItem="GCw-qN-dA2" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1iO-Lh-irQ" secondAttribute="bottom" constant="8" symbolic="YES" id="uSI-Sr-Sm0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
