@@ -97,6 +97,10 @@ struct SetGame {
     
     mutating func dealThreeCards() {
         if inMatchedState {
+            //increase matches count
+            matches += 1
+            
+            //return a new card from deck if there are cards in pla
             cardsInPlay = cardsInPlay.map { if selectedCards.contains($0) {
                     return deck.count > 0 ? removeCardFromDeck(): $0
                 } else {
