@@ -160,7 +160,7 @@ class ViewController: UIViewController {
             }
         }
         
-        /* hide deal card button */
+        /* disable deal card button */
         if !game.canDeal {
             dealButton.isEnabled = false
         }
