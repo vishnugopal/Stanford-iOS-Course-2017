@@ -22,6 +22,7 @@ struct SetGame {
     private var moves = 0
     private var matches = 0
     private var misMatches = 0
+    private var dealsWhenSetPossibleInCardsInPlay = 0
     
     var inMatchedState: Bool {
         //uncomment for easier testing
@@ -47,6 +48,10 @@ struct SetGame {
         } else if timePassed < Double(20 * matches) {
             score += 2 * matches
         }
+        
+        //Penalize a deal when a set is possible from the cards in play
+        score -= (dealsWhenSetPossibleInCardsInPlay * 5)
+        
         return score
     }
     
@@ -102,6 +107,10 @@ struct SetGame {
             // clear selected cards
             selectedCards = [Card]()
         } else {
+            if Card.isSetPossible(fromCards: cardsInPlay) {
+                dealsWhenSetPossibleInCardsInPlay += 1
+            }
+            
             /* Remove number cards from deck where number is: 1. is less than the playingDeckMaxSize, and 2. less than the deck size */
             var cardsToRemove = (playingDeckMaxSize - cardsInPlay.count) > 3 ? 3: (playingDeckMaxSize - cardsInPlay.count)
             cardsToRemove = cardsToRemove > deck.count ? deck.count: cardsToRemove
@@ -138,14 +147,19 @@ struct SetGame {
     
     private mutating func populateInitialPlayingCards() {
         cardsInPlay = [Card]()
-        repeat {
-            dealThreeCards()
-        } while cardsInPlay.count < initialDealSize
+        
+        for _ in 0..<initialDealSize {
+            cardsInPlay += [removeCardFromDeck()]
+        }
     }
     
     init(initialDealSize: Int, playingDeckMaxSize: Int) {
         self.initialDealSize = initialDealSize
         self.playingDeckMaxSize = playingDeckMaxSize
+        
+        assert(playingDeckMaxSize > initialDealSize, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMazSize must be greater than the initialDealSize.")
+        assert(playingDeckMaxSize % 3 == 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMaxSize must be a multiple of the regular deal size (3)")
+        
         reset()
     }
 }

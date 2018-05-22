@@ -31,7 +31,11 @@ extension CardState {
 }
 
 /// A UI agnostic SetGame Card that has 4 attributes
-struct Card: Hashable, Equatable {
+struct Card: Hashable, Equatable, CustomStringConvertible {
+    var description: String {
+        return "NU:\(number) SY:\(symbol) SH:\(shading) CO: \(color)"
+    }
+    
     typealias CardNumber = CardState
     typealias CardSymbol = CardState
     typealias CardShading = CardState
@@ -41,6 +45,36 @@ struct Card: Hashable, Equatable {
     var symbol: CardSymbol
     var shading: CardShading
     var color: CardColor
+    
+    static func isSetPossible(fromCards cards: [Card]) -> Bool {
+        return findSets(fromCards: cards).count > 0
+    }
+    
+    static func findSets(fromCards cards: [Card]) -> Array<[Card]> {
+        var foundSets = Array<[Card]>()
+        
+        /* Return an empty array if there are not enough cards to check */
+        if cards.count < 3 {
+            return foundSets
+        }
+        
+        for firstCard in cards[0...(cards.count - 3)] {
+            for secondCard in cards[1...(cards.count - 2)] {
+                for thirdCard in cards[2...(cards.count - 1)] {
+                    if (firstCard == secondCard) || (secondCard == thirdCard) || (firstCard == thirdCard) {
+                        break
+                    }
+                    
+                    let cardTriad = [firstCard, secondCard, thirdCard]
+                    if isSet(cardTriad) {
+                        foundSets.append(cardTriad)
+                    }
+                }
+            }
+        }
+        
+        return foundSets
+    }
     
     static func isSet(_ cards: [Card], simulateMatch: Bool = false) -> Bool {
         if cards.count < 3 {
@@ -103,4 +137,6 @@ struct Card: Hashable, Equatable {
         }
         return shuffledDeck
     }
+    
+    
 }
