@@ -8,45 +8,16 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, PlayerMovable {
     //MARK: Model
     
-    private let humanPlayer = Player()
-    private let computerPlayer = Player()
+    private var humanPlayer: Player! = nil
+    private var computerPlayer: Player! = nil
+    private var isComputerMoving = false
+    private var isComputerAboutToMove = false
+    private var game: SetGame! = nil
     
-    var computerMoving = false
-    var computerAboutToMove = false
-    
-    lazy private var game = SetGame(initialDealSize: 20, playingDeckMaxSize: cardButtons.count, players: [humanPlayer, computerPlayer])
-    lazy private var computerTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 15)!, repeats: true) { _ in
-        print("Timer fired!")
-        self.computerAboutToMove = true
-        self.updateUI()
-        let _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 5)!, repeats: false) { _ in
-            if !self.game.inMatchedState {
-                print("Not matched!")
-                if let setOfCards = Card.onePossibleSet(fromCards: self.game.cardsInPlay) {
-                    self.computerMoving = true
-                    print("Found cards!")
-                    self.game.clearSelected()
-                    for card in setOfCards {
-                        if let index = self.game.cardsInPlay.index(of: card) {
-                            self.game.selectCard(byIndex: index, forPlayer: self.computerPlayer)
-                        }
-                    }
-                    let _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 2)!, repeats: false) { _ in
-                        if self.game.canDeal {
-                            self.game.dealThreeCards(forPlayer: self.computerPlayer)
-                        }
-                        self.computerMoving = false
-                        self.updateUI()
-                    }
-                }
-            }
-            self.computerAboutToMove = false
-            self.updateUI()
-        }
-    }
+    lazy private var computerTimer: Timer = timerForComputerPlayer()
     
     //MARK: Outlets
     @IBOutlet var cardButtons: [UIButton]!
@@ -56,12 +27,14 @@ class ViewController: UIViewController {
     
     //MARK: Actions
     @IBAction func newGame() {
+        computerTimer.invalidate()
+        computerTimer = timerForComputerPlayer()
         game.reset()
         updateUI()
     }
     
     @IBAction func dealThreeCards() {
-        if computerMoving {
+        if isComputerMoving {
             return
         }
         
@@ -70,7 +43,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
-        if computerMoving {
+        if isComputerMoving {
             return
         }
         
@@ -102,11 +75,35 @@ class ViewController: UIViewController {
     //MARK: Overrides
     
     override func viewDidLoad() {
+        game = SetGame(initialDealSize: 20, playingDeckMaxSize: cardButtons.count)
+        humanPlayer = Player(game: game, moveDelegate: self)
+        computerPlayer = Player(game: game, moveDelegate: self)
+        game.players = [humanPlayer, computerPlayer]
+        
         computerTimer.tolerance = 2
         updateUI()
     }
     
-    //MARK: Public Functions
+    //MARK: Delegate Functions
+    
+    func beforeMove() {
+        self.isComputerAboutToMove = true
+        self.updateUI()
+    }
+    
+    func moveStart() {
+        self.isComputerMoving = true
+    }
+    
+    func moveEnd() {
+        self.isComputerMoving = false
+        self.updateUI()
+    }
+    
+    func afterMove() {
+        self.isComputerAboutToMove = false
+        self.updateUI()
+    }
     
     //MARK: Private Functions
 
@@ -166,6 +163,14 @@ class ViewController: UIViewController {
         return attributedString
     }
     
+    private func timerForComputerPlayer() -> Timer {
+        let timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 15)!, repeats: true) { _ in
+            self.computerPlayer.findAndMakeMove()
+        }
+        
+        return timer
+    }
+    
     private func updateUI() {
         /* let's reset all state first */
         dealButton.isEnabled = true
@@ -201,15 +206,15 @@ class ViewController: UIViewController {
         }
         
         /* disable deal card button */
-        if !game.canDeal || computerMoving {
+        if !game.canDeal || isComputerMoving {
             dealButton.isEnabled = false
         }
         
         /* Correct score */
-        if computerMoving {
+        if isComputerMoving {
             playerScoreLabel.text = "😞Player: \(humanPlayer.score)"
             computerScoreLabel.text = "😀Score:\(computerPlayer.score)"
-        } else if computerAboutToMove {
+        } else if isComputerAboutToMove {
             playerScoreLabel.text = "😨Player: \(humanPlayer.score)"
             computerScoreLabel.text = "😎Score:\(self.computerPlayer.score)"
         } else {

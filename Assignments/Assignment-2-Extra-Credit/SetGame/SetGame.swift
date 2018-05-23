@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SetGame {
+class SetGame {
     var deck = [Card]()
     var cardsInPlay = [Card]()
     var selectedCards = [Card]()
@@ -31,7 +31,7 @@ struct SetGame {
         return !cannotDeal
     }
     
-    mutating func selectCard(byIndex index: Int, forPlayer player: Player) {
+    func selectCard(byIndex index: Int, forPlayer player: Player) {
         /* If an index is passed outside cards currently in play, do nothing */
         if index >= cardsInPlay.count {
             return
@@ -74,7 +74,7 @@ struct SetGame {
         
     }
     
-    mutating func dealThreeCards(forPlayer player: Player) {
+    func dealThreeCards(forPlayer player: Player) {
         if inMatchedState {
             //increase matches count
             player.matches += 1
@@ -105,11 +105,11 @@ struct SetGame {
         assert(cardsInPlay.count <= playingDeckMaxSize, "dealThreeCards(): more cards in play than max playing deck size")
     }
     
-    mutating func clearSelected() {
+    func clearSelected() {
         selectedCards = [Card]()
     }
     
-    mutating func reset() {
+    func reset() {
         deck = Card.newShuffledDeck()
         populateInitialPlayingCards()
         
@@ -119,18 +119,18 @@ struct SetGame {
         resetPlayers()
     }
     
-    private mutating func resetPlayers() {
+    private func resetPlayers() {
         for player in players {
             player.reset()
         }
     }
     
-    private mutating func removeCardFromDeck() -> Card {
+    private func removeCardFromDeck() -> Card {
         assert(deck.count > 0, "removeCardFromDeck(): with an empty deck")
         return deck.removeFirst()
     }
     
-    private mutating func populateInitialPlayingCards() {
+    private func populateInitialPlayingCards() {
         cardsInPlay = [Card]()
         
         for _ in 0..<initialDealSize {
@@ -138,15 +138,12 @@ struct SetGame {
         }
     }
     
-    init(initialDealSize: Int, playingDeckMaxSize: Int, players: [Player]) {
-        assert(playingDeckMaxSize > initialDealSize, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): playingDeckMazSize must be greater than the initialDealSize.")
-        assert(playingDeckMaxSize % 3 == 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): playingDeckMaxSize must be a multiple of the regular deal size (3)")
-        assert(players.count > 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): must have at least one player")
+    init(initialDealSize: Int, playingDeckMaxSize: Int) {
+        assert(playingDeckMaxSize > initialDealSize, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMazSize must be greater than the initialDealSize.")
+        assert(playingDeckMaxSize % 3 == 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMaxSize must be a multiple of the regular deal size (3)")
 
         self.initialDealSize = initialDealSize
         self.playingDeckMaxSize = playingDeckMaxSize
-        self.players = players
-        
         reset()
     }
 }
