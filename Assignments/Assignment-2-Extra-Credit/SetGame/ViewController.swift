@@ -11,40 +11,79 @@ import UIKit
 class ViewController: UIViewController {
     //MARK: Model
     
-    lazy private var game = SetGame(initialDealSize: 12, playingDeckMaxSize: cardButtons.count)
+    private let humanPlayer = Player()
+    private let computerPlayer = Player()
+    
+    var computerMoving = false
+    var computerAboutToMove = false
+    
+    lazy private var game = SetGame(initialDealSize: 20, playingDeckMaxSize: cardButtons.count, players: [humanPlayer, computerPlayer])
+    lazy private var computerTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 15)!, repeats: true) { _ in
+        print("Timer fired!")
+        self.computerAboutToMove = true
+        self.updateUI()
+        let _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 5)!, repeats: false) { _ in
+            if !self.game.inMatchedState {
+                print("Not matched!")
+                if let setOfCards = Card.onePossibleSet(fromCards: self.game.cardsInPlay) {
+                    self.computerMoving = true
+                    print("Found cards!")
+                    self.game.clearSelected()
+                    for card in setOfCards {
+                        if let index = self.game.cardsInPlay.index(of: card) {
+                            self.game.selectCard(byIndex: index, forPlayer: self.computerPlayer)
+                        }
+                    }
+                    let _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(exactly: 2)!, repeats: false) { _ in
+                        if self.game.canDeal {
+                            self.game.dealThreeCards(forPlayer: self.computerPlayer)
+                        }
+                        self.computerMoving = false
+                        self.updateUI()
+                    }
+                }
+            }
+            self.computerAboutToMove = false
+            self.updateUI()
+        }
+    }
     
     //MARK: Outlets
-    
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var dealButton: UIButton!
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var playerScoreLabel: UILabel!
+    @IBOutlet weak var computerScoreLabel: UILabel!
     
     //MARK: Actions
-
     @IBAction func newGame() {
         game.reset()
         updateUI()
     }
     
     @IBAction func dealThreeCards() {
-        game.dealThreeCards()
+        if computerMoving {
+            return
+        }
+        
+        game.dealThreeCards(forPlayer: humanPlayer)
         updateUI()
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
+        if computerMoving {
+            return
+        }
+        
         if let selectedIndex = cardButtons.index(of: sender) {
-            game.selectCard(byIndex: selectedIndex)
+            game.selectCard(byIndex: selectedIndex, forPlayer: humanPlayer)
         } else {
-            
+            assertionFailure("touchCard(\(sender)): Can't find touched card in the cards visible.")
         }
         updateUI()
     }
 
     @IBAction func provideHint() {
-        let possibleSets = Card.findSets(fromCards: game.cardsInPlay)
-        let possibleSet = possibleSets.count > 0 ? possibleSets[0]: nil
-        
-        if let setOfCards = possibleSet {
+        if let setOfCards = Card.onePossibleSet(fromCards: game.cardsInPlay) {
             for card in setOfCards {
                 if let index = game.cardsInPlay.index(of: card) {
                     cardButtons[index].layer.borderWidth = 3.0
@@ -63,6 +102,7 @@ class ViewController: UIViewController {
     //MARK: Overrides
     
     override func viewDidLoad() {
+        computerTimer.tolerance = 2
         updateUI()
     }
     
@@ -129,7 +169,7 @@ class ViewController: UIViewController {
     private func updateUI() {
         /* let's reset all state first */
         dealButton.isEnabled = true
-        scoreLabel.text = "Score: 0"
+        playerScoreLabel.text = "Player: 0"
         for cardButton in cardButtons {
             cardButton.setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
@@ -161,12 +201,21 @@ class ViewController: UIViewController {
         }
         
         /* disable deal card button */
-        if !game.canDeal {
+        if !game.canDeal || computerMoving {
             dealButton.isEnabled = false
         }
         
         /* Correct score */
-        scoreLabel.text = "Score: \(game.score)"
+        if computerMoving {
+            playerScoreLabel.text = "😞Player: \(humanPlayer.score)"
+            computerScoreLabel.text = "😀Score:\(computerPlayer.score)"
+        } else if computerAboutToMove {
+            playerScoreLabel.text = "😨Player: \(humanPlayer.score)"
+            computerScoreLabel.text = "😎Score:\(self.computerPlayer.score)"
+        } else {
+            playerScoreLabel.text = "🤔Player: \(humanPlayer.score)"
+            computerScoreLabel.text = "🤔Score:\(computerPlayer.score)"
+        }
     }
 }
 

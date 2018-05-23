@@ -13,16 +13,10 @@ struct SetGame {
     var cardsInPlay = [Card]()
     var selectedCards = [Card]()
     var matchedCards = [Card]()
-    var gameStartTime = Date()
+    var players = [Player]()
     
     private let playingDeckMaxSize: Int
     private let initialDealSize: Int
-    
-    /* A count of moves, matches and mismatches to calculate score */
-    private var moves = 0
-    private var matches = 0
-    private var misMatches = 0
-    private var dealsWhenSetPossibleInCardsInPlay = 0
     
     var inMatchedState: Bool {
         //uncomment for easier testing
@@ -37,25 +31,7 @@ struct SetGame {
         return !cannotDeal
     }
     
-    /* Heavily weighed towards matches because game makes it very hard to find a match */
-    var score: Int {
-        var score = (matches * 20) - (misMatches * 2) - moves
-        let timePassed = Date().timeIntervalSince(gameStartTime)
-        if timePassed < Double(5 * matches) {
-            score += 10 * matches
-        } else if timePassed < Double(10 * matches) {
-            score += 5 * matches
-        } else if timePassed < Double(20 * matches) {
-            score += 2 * matches
-        }
-        
-        //Penalize a deal when a set is possible from the cards in play
-        score -= (dealsWhenSetPossibleInCardsInPlay * 5)
-        
-        return score
-    }
-    
-    mutating func selectCard(byIndex index: Int) {
+    mutating func selectCard(byIndex index: Int, forPlayer player: Player) {
         /* If an index is passed outside cards currently in play, do nothing */
         if index >= cardsInPlay.count {
             return
@@ -73,14 +49,14 @@ struct SetGame {
         }
         
         /* Increment moves */
-        moves += 1
+        player.moves += 1
 
         /* Automatically deal three cards before proceeding if in matched state */
         if inMatchedState {
-            matches += 1
-            dealThreeCards()
+            player.matches += 1
+            dealThreeCards(forPlayer: player)
         } else if (selectedCards.count == 3) {
-            misMatches += 1
+            player.misMatches += 1
         }
         
         /* If 3 cards are selected, reset selection */
@@ -93,12 +69,15 @@ struct SetGame {
         if !selectedCards.contains(cardsInPlay[index]) {
             selectedCards.append(cardsInPlay[index])
         }
+        
+        /* Set last played player */
+        
     }
     
-    mutating func dealThreeCards() {
+    mutating func dealThreeCards(forPlayer player: Player) {
         if inMatchedState {
             //increase matches count
-            matches += 1
+            player.matches += 1
             
             //return a new card from deck if there are cards in pla
             cardsInPlay = cardsInPlay.map { if selectedCards.contains($0) {
@@ -112,7 +91,7 @@ struct SetGame {
             selectedCards = [Card]()
         } else {
             if Card.isSetPossible(fromCards: cardsInPlay) {
-                dealsWhenSetPossibleInCardsInPlay += 1
+                player.dealsWhenSetPossibleInCardsInPlay += 1
             }
             
             /* Remove number cards from deck where number is: 1. is less than the playingDeckMaxSize, and 2. less than the deck size */
@@ -126,6 +105,10 @@ struct SetGame {
         assert(cardsInPlay.count <= playingDeckMaxSize, "dealThreeCards(): more cards in play than max playing deck size")
     }
     
+    mutating func clearSelected() {
+        selectedCards = [Card]()
+    }
+    
     mutating func reset() {
         deck = Card.newShuffledDeck()
         populateInitialPlayingCards()
@@ -133,15 +116,13 @@ struct SetGame {
         selectedCards = [Card]()
         matchedCards = [Card]()
         
-        resetMoves()
-        
-        gameStartTime = Date()
+        resetPlayers()
     }
     
-    private mutating func resetMoves() {
-        moves = 0
-        matches = 0
-        misMatches = 0
+    private mutating func resetPlayers() {
+        for player in players {
+            player.reset()
+        }
     }
     
     private mutating func removeCardFromDeck() -> Card {
@@ -157,12 +138,14 @@ struct SetGame {
         }
     }
     
-    init(initialDealSize: Int, playingDeckMaxSize: Int) {
+    init(initialDealSize: Int, playingDeckMaxSize: Int, players: [Player]) {
+        assert(playingDeckMaxSize > initialDealSize, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): playingDeckMazSize must be greater than the initialDealSize.")
+        assert(playingDeckMaxSize % 3 == 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): playingDeckMaxSize must be a multiple of the regular deal size (3)")
+        assert(players.count > 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize), players: \(players)): must have at least one player")
+
         self.initialDealSize = initialDealSize
         self.playingDeckMaxSize = playingDeckMaxSize
-        
-        assert(playingDeckMaxSize > initialDealSize, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMazSize must be greater than the initialDealSize.")
-        assert(playingDeckMaxSize % 3 == 0, "SetGame(initialDealSize: \(initialDealSize), playingDeckMaxSize: \(playingDeckMaxSize)): playingDeckMaxSize must be a multiple of the regular deal size (3)")
+        self.players = players
         
         reset()
     }

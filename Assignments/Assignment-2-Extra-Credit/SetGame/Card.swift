@@ -76,6 +76,11 @@ struct Card: Hashable, Equatable, CustomStringConvertible {
         return foundSets
     }
     
+    static func onePossibleSet(fromCards cards: [Card]) -> [Card]? {
+        let possibleSets = findSets(fromCards: cards)
+        return possibleSets.count > 0 ? possibleSets[0]: nil
+    }
+    
     static func isSet(_ cards: [Card], simulateMatch: Bool = false) -> Bool {
         if cards.count < 3 {
             return false

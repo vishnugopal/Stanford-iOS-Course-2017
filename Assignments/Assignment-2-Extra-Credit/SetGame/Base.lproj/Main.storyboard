@@ -222,54 +222,71 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="GCw-qN-dA2">
-                                <rect key="frame" x="16" y="732" width="343" height="30"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="FaR-i3-pG7">
+                                <rect key="frame" x="16" y="703.66666666666663" width="343" height="58.333333333333371"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9O-lf-rMb">
-                                        <rect key="frame" x="0.0" y="0.0" width="64" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Zb-OT-7TO">
-                                        <rect key="frame" x="93.333333333333314" y="0.0" width="75" height="30"/>
-                                        <state key="normal" title="New Game"/>
-                                        <connections>
-                                            <action selector="newGame" destination="BYZ-38-t0r" eventType="touchUpInside" id="kzU-ZS-ORJ"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZS-gp-Cmj">
-                                        <rect key="frame" x="214" y="0.0" width="31" height="30"/>
-                                        <state key="normal" title="Deal"/>
-                                        <connections>
-                                            <action selector="dealThreeCards" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rgj-h6-95G"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8zd-FX-Qq4">
-                                        <rect key="frame" x="313" y="0.0" width="30" height="30"/>
-                                        <state key="normal" title="Hint"/>
-                                        <connections>
-                                            <action selector="provideHint" destination="BYZ-38-t0r" eventType="touchUpInside" id="t3x-jW-spo"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="YPr-cU-gQl">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="20.333333333333332"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player: 0🤔" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9O-lf-rMb">
+                                                <rect key="frame" x="0.0" y="0.0" width="89.333333333333329" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 🤔Computer: 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XeJ-As-gle">
+                                                <rect key="frame" x="219.66666666666666" y="0.0" width="123.33333333333334" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="GCw-qN-dA2">
+                                        <rect key="frame" x="0.0" y="28.333333333333371" width="343" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Zb-OT-7TO">
+                                                <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                                <state key="normal" title="New Game"/>
+                                                <connections>
+                                                    <action selector="newGame" destination="BYZ-38-t0r" eventType="touchUpInside" id="kzU-ZS-ORJ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZS-gp-Cmj">
+                                                <rect key="frame" x="167.33333333333334" y="0.0" width="31" height="30"/>
+                                                <state key="normal" title="Deal"/>
+                                                <connections>
+                                                    <action selector="dealThreeCards" destination="BYZ-38-t0r" eventType="touchUpInside" id="Rgj-h6-95G"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8zd-FX-Qq4">
+                                                <rect key="frame" x="313" y="0.0" width="30" height="30"/>
+                                                <state key="normal" title="Hint"/>
+                                                <connections>
+                                                    <action selector="provideHint" destination="BYZ-38-t0r" eventType="touchUpInside" id="t3x-jW-spo"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GCw-qN-dA2" secondAttribute="trailing" constant="16" id="Etb-Pr-Bcu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FaR-i3-pG7" secondAttribute="trailing" constant="16" id="1aZ-SF-p4m"/>
                             <constraint firstItem="1iO-Lh-irQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="FI6-Pq-ORX"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="GCw-qN-dA2" secondAttribute="bottom" constant="16" id="WZa-DJ-FJy"/>
-                            <constraint firstItem="GCw-qN-dA2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ZBg-hZ-nbk"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FaR-i3-pG7" secondAttribute="bottom" constant="16" id="H8D-j2-4pJ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1iO-Lh-irQ" secondAttribute="trailing" constant="16" id="dSi-FO-4vm"/>
+                            <constraint firstItem="FaR-i3-pG7" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1iO-Lh-irQ" secondAttribute="bottom" constant="8" symbolic="YES" id="fUM-3n-xY7"/>
+                            <constraint firstItem="FaR-i3-pG7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ggo-RO-y3H"/>
                             <constraint firstItem="1iO-Lh-irQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="sny-Hp-QcH"/>
-                            <constraint firstItem="GCw-qN-dA2" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1iO-Lh-irQ" secondAttribute="bottom" constant="8" symbolic="YES" id="uSI-Sr-Sm0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="computerScoreLabel" destination="XeJ-As-gle" id="WXX-qS-vNU"/>
                         <outlet property="dealButton" destination="nZS-gp-Cmj" id="tQM-gT-xKb"/>
-                        <outlet property="scoreLabel" destination="f9O-lf-rMb" id="9jP-dh-OqA"/>
+                        <outlet property="playerScoreLabel" destination="f9O-lf-rMb" id="9jP-dh-OqA"/>
                         <outletCollection property="cardButtons" destination="Nnx-Nf-FLU" collectionClass="NSMutableArray" id="s39-a0-xB0"/>
                         <outletCollection property="cardButtons" destination="Cel-pI-QTr" collectionClass="NSMutableArray" id="Nxa-zc-s6b"/>
                         <outletCollection property="cardButtons" destination="TqB-ap-sP1" collectionClass="NSMutableArray" id="6Y2-nA-t1O"/>
@@ -298,7 +315,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="136.80000000000001" y="133.00492610837438"/>
         </scene>
     </scenes>
 </document>
