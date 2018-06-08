@@ -43,9 +43,9 @@ class CardView: UIView {
     
     @IBInspectable
     var pipNumber: Int = 3
-    var symbol: Symbol = .diamond
-    var shading: Shading = .open
-    var color: Color = .red
+    var symbol: Symbol = .squiggle
+    var shading: Shading = .striped
+    var color: Color = .green
     
     override func draw(_ rect: CGRect) {
         drawCardOutline()
@@ -79,8 +79,8 @@ class CardView: UIView {
             drawOvalPip(withinRect: enclosingRect)
         case .diamond:
             drawDiamondPip(withinRect: enclosingRect)
-        default:
-            return
+        case .squiggle:
+            drawSquigglePip(withinRect: enclosingRect)
         }
     }
     
@@ -96,6 +96,15 @@ class CardView: UIView {
         }
         
         return UIColor(patternImage: stripes)
+    }
+    
+    private func drawSquigglePip(withinRect enclosingRect: CGRect) {
+        let origin = enclosingRect.origin
+        
+        let path = UIBezierPath(ovalIn: CGRect(origin: origin.offsetBy(dx: enclosingRect.minX + enclosingRect.width * 0.25, dy: 0), size: CGSize(width: enclosingRect.width * 0.75, height: enclosingRect.height * 0.5)))
+        
+        color.drawColor.setStroke()
+        path.stroke()
     }
     
     private func drawDiamondPip(withinRect enclosingRect: CGRect) {
