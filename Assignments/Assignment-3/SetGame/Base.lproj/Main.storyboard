@@ -43,8 +43,8 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lIG-7u-phb" customClass="CardView" customModule="SetGame" customModuleProvider="target">
-                                <rect key="frame" x="16" y="44" width="240" height="305"/>
+                            <view opaque="NO" contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lIG-7u-phb" customClass="CardView" customModule="SetGame" customModuleProvider="target">
+                                <rect key="frame" x="16" y="44" width="287" height="161"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>

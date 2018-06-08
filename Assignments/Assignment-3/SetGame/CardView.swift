@@ -43,8 +43,8 @@ class CardView: UIView {
     
     @IBInspectable
     var pipNumber: Int = 3
-    var symbol: Symbol = .oval
-    var shading: Shading = .striped
+    var symbol: Symbol = .diamond
+    var shading: Shading = .open
     var color: Color = .red
     
     override func draw(_ rect: CGRect) {
@@ -77,15 +77,54 @@ class CardView: UIView {
         switch symbol {
         case .oval:
             drawOvalPip(withinRect: enclosingRect)
+        case .diamond:
+            drawDiamondPip(withinRect: enclosingRect)
         default:
             return
         }
+    }
+    
+    private var stripesPattern: UIColor {
+        let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
+        
+        let stripes = imageRenderer.image { context in
+            let imageContext = context.cgContext
+            imageContext.setFillColor(color.drawColor.cgColor)
+            imageContext.fill(CGRect(x: 0, y: 0, width: 4, height: 2))
+            imageContext.setFillColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor)
+            imageContext.fill(CGRect(x: 2, y: 0, width: 4, height: 2))
+        }
+        
+        return UIColor(patternImage: stripes)
+    }
+    
+    private func drawDiamondPip(withinRect enclosingRect: CGRect) {
+        let path = UIBezierPath()
+        
+        let origin = enclosingRect.origin
+        let firstPoint = origin.offsetBy(dx: enclosingRect.width / 2, dy: 0)
+        let secondPoint = origin.offsetBy(dx: 0, dy: enclosingRect.height / 2)
+        let thirdPoint = firstPoint.offsetBy(dx: 0, dy: enclosingRect.height)
+        let fourthPoint = secondPoint.offsetBy(dx: enclosingRect.width, dy: 0)
+        
+        path.move(to: firstPoint)
+        path.addLine(to: secondPoint)
+        path.addLine(to: thirdPoint)
+        path.addLine(to: fourthPoint)
+        path.close()
+        color.drawColor.setStroke()
+        path.stroke()
+        drawShading(forPath: path)
     }
     
     private func drawOvalPip(withinRect enclosingRect: CGRect) {
         let path = UIBezierPath(roundedRect: enclosingRect, byRoundingCorners: [UIRectCorner.topRight, .topLeft, .bottomRight, .bottomLeft], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         color.drawColor.setStroke()
         path.stroke()
+        drawShading(forPath: path)
+    }
+    
+    private func drawShading(forPath path: UIBezierPath) {
         switch shading {
         case .open:
             break
@@ -93,17 +132,6 @@ class CardView: UIView {
             color.drawColor.setFill()
             path.fill()
         case .striped:
-            let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
-            
-            let stripes = imageRenderer.image { context in
-                let imageContext = context.cgContext
-                imageContext.setFillColor(color.drawColor.cgColor)
-                imageContext.fill(CGRect(x: 0, y: 0, width: 4, height: 2))
-                imageContext.setFillColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor)
-                imageContext.fill(CGRect(x: 2, y: 0, width: 4, height: 2))
-            }
-            
-            let stripesPattern = UIColor(patternImage: stripes)
             stripesPattern.setFill()
             path.fill()
         }
@@ -186,6 +214,12 @@ extension CGRect {
 }
 
 extension CGPoint {
+    static var standardSpacing: CGPoint {
+        return CGPoint(x: 16, y: 16)
+    }
+    func offsetBy(point: CGPoint) -> CGPoint {
+        return CGPoint(x: x+point.x, y:y+point.y)
+    }
     func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
         return CGPoint(x: x+dx, y: y+dy)
     }
