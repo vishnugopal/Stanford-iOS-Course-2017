@@ -27,7 +27,7 @@ class CardView: UIView {
         case green
         case purple
         
-        var color: UIColor {
+        var drawColor: UIColor {
             get {
                 switch self {
                 case .red:
@@ -44,7 +44,7 @@ class CardView: UIView {
     @IBInspectable
     var pipNumber: Int = 3
     var symbol: Symbol = .oval
-    var shading: Shading = .open
+    var shading: Shading = .striped
     var color: Color = .red
     
     override func draw(_ rect: CGRect) {
@@ -84,8 +84,29 @@ class CardView: UIView {
     
     private func drawOvalPip(withinRect enclosingRect: CGRect) {
         let path = UIBezierPath(roundedRect: enclosingRect, byRoundingCorners: [UIRectCorner.topRight, .topLeft, .bottomRight, .bottomLeft], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
-        color.color.setStroke()
+        color.drawColor.setStroke()
         path.stroke()
+        switch shading {
+        case .open:
+            break
+        case .solid:
+            color.drawColor.setFill()
+            path.fill()
+        case .striped:
+            let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4))
+            
+            let stripes = imageRenderer.image { context in
+                let imageContext = context.cgContext
+                imageContext.setFillColor(color.drawColor.cgColor)
+                imageContext.fill(CGRect(x: 0, y: 0, width: 4, height: 2))
+                imageContext.setFillColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor)
+                imageContext.fill(CGRect(x: 2, y: 0, width: 4, height: 2))
+            }
+            
+            let stripesPattern = UIColor(patternImage: stripes)
+            stripesPattern.setFill()
+            path.fill()
+        }
     }
     
     /** Get the rectangle to draw the pip */
