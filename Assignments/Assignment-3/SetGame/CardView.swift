@@ -42,20 +42,75 @@ class CardView: UIView {
     }
     
     @IBInspectable
-    var pipNumber: Int = 1
+    var pipNumber: Int = 3
     var symbol: Symbol = .oval
     var shading: Shading = .open
     var color: Color = .red
     
     override func draw(_ rect: CGRect) {
+        drawCardOutline()
+        drawPips()
+    }
+    
+    /** Draw the rounded outline of a card */
+    private func drawCardOutline() {
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
         roundedRect.addClip()
         UIColor.white.setFill()
         roundedRect.fill()
-        
-        let path = UIBezierPath(roundedRect: pipRect(pipPosition: pipNumber, totalPips: 3), byRoundingCorners: [UIRectCorner.topRight, .topLeft, .bottomRight, .bottomLeft], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+    }
+    
+    /** Draw all the pips */
+    private func drawPips() {
+        for position in 1...pipNumber {
+            drawPip(atPosition: position, withTotalPips: pipNumber)
+        }
+    }
+    
+    /**
+        Draw a pip at position.
+     
+        Will correctly align the pip based on the total number of pips in the card.
+     */
+    private func drawPip(atPosition pipPosition: Int, withTotalPips totalPips: Int) {
+        let enclosingRect = pipRect(atPosition: pipPosition, withTotalPips: totalPips)
+        switch symbol {
+        case .oval:
+            drawOvalPip(withinRect: enclosingRect)
+        default:
+            return
+        }
+    }
+    
+    private func drawOvalPip(withinRect enclosingRect: CGRect) {
+        let path = UIBezierPath(roundedRect: enclosingRect, byRoundingCorners: [UIRectCorner.topRight, .topLeft, .bottomRight, .bottomLeft], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         color.color.setStroke()
         path.stroke()
+    }
+    
+    /** Get the rectangle to draw the pip */
+    private func pipRect(atPosition pipPosition: Int, withTotalPips totalPips: Int) -> CGRect {
+        assert(totalPips >= pipPosition, "CardView.pipRect(pipPosition:\(pipPosition), totalPips:\(totalPips)): Total pips must be greater or equal to than pip position.")
+        switch (pipPosition, totalPips) {
+        /* Just one pip */
+        case (1, 1):
+            return bounds.secondThird.inset(by: CGRect.standardSpacing)
+        /* Two pips */
+        case (1, 2):
+            return bounds.leftMiddleThird.inset(by: CGRect.standardSpacing)
+        case (2, 2):
+            return bounds.rightMiddleThird.inset(by: CGRect.standardSpacing)
+        /* Three pips */
+        case (1, 3):
+            return bounds.firstThird.inset(by: CGRect.standardSpacing)
+        case (2, 3):
+            return bounds.secondThird.inset(by: CGRect.standardSpacing)
+        case (3, 3):
+            return bounds.lastThird.inset(by: CGRect.standardSpacing)
+        default:
+            assertionFailure("CardView.pipRect(pipPosition:\(pipPosition), totalPips:\(totalPips)): Can't draw pips in this combination.")
+            return CGRect.zero
+        }
     }
 }
 
@@ -75,27 +130,12 @@ extension CardView {
     private var cornerFontSize: CGFloat {
         return bounds.size.height * SizeRatio.cornerFontSizeToBoundsHeight
     }
-    private func pipRect(pipPosition: Int, totalPips: Int) -> CGRect {
-        assert(totalPips >= pipPosition, "CardView.pipRect(pipPosition:\(pipPosition), totalPips:\(totalPips)): Total pips must be greater or equal to than pip position.")
-        switch (pipPosition, totalPips) {
-        case (1, 1), (2, 3):
-            return bounds.secondThird.insetBy(dx: 5, dy: 5)
-        case (1, 3):
-            return bounds.firstThird.insetBy(dx: 5, dy: 5)
-        case (1, 2):
-            return bounds.leftHalf.insetBy(dx: 5, dy: 5)
-        case (3, 3):
-            return bounds.lastThird.insetBy(dx: 5, dy: 5)
-        case (2, 2):
-            return bounds.rightHalf.insetBy(dx: 5, dy: 5)
-        default:
-            assertionFailure("CardView.pipRect(pipPosition:\(pipPosition), totalPips:\(totalPips)): Can't draw pips in this combination.")
-            return CGRect.zero
-        }
-    }
 }
 
 extension CGRect {
+    static var standardSpacing: CGSize {
+        return CGSize(width: 16, height: 16)
+    }
     var firstThird: CGRect {
         return CGRect(x: minX, y: minY, width: width/3, height: height)
     }
@@ -105,11 +145,11 @@ extension CGRect {
     var lastThird: CGRect {
         return CGRect(x: maxX - width/3, y: minY, width: width/3, height: height)
     }
-    var leftHalf: CGRect {
-        return CGRect(x: minX, y: minY, width: width/2, height: height)
+    var leftMiddleThird: CGRect {
+        return CGRect(x: midX - width/3, y: minY, width: width/3, height: height)
     }
-    var rightHalf: CGRect {
-        return CGRect(x: midX, y: minY, width: width/2, height: height)
+    var rightMiddleThird: CGRect {
+        return CGRect(x: midX, y: minY, width: width/3, height: height)
     }
     func inset(by size: CGSize) -> CGRect {
         return insetBy(dx: size.width, dy: size.height)
