@@ -44,7 +44,7 @@ class CardView: UIView {
     @IBInspectable
     var pipNumber: Int = 3
     var symbol: Symbol = .squiggle
-    var shading: Shading = .striped
+    var shading: Shading = .open
     var color: Color = .green
     
     override func draw(_ rect: CGRect) {
@@ -99,12 +99,59 @@ class CardView: UIView {
     }
     
     private func drawSquigglePip(withinRect enclosingRect: CGRect) {
-        let origin = enclosingRect.origin
+        let drawArea = enclosingRect.origin
+        let drawAreaHeight = enclosingRect.height
+        let drawAreaWidth = enclosingRect.width
         
-        let path = UIBezierPath(ovalIn: CGRect(origin: origin.offsetBy(dx: enclosingRect.minX + enclosingRect.width * 0.25, dy: 0), size: CGSize(width: enclosingRect.width * 0.75, height: enclosingRect.height * 0.5)))
+        let ellipse1RectOrigin = drawArea.offsetBy(dx: 0, dy: drawAreaHeight * 0.15)
+        let ellipse1RectSize = CGSize(width: drawAreaWidth * 0.3, height: drawAreaHeight * 0.5)
+        
+        let ellipse2OffsetX = drawAreaWidth - drawAreaWidth * 0.3
+        let ellipse2OffsetY = drawAreaHeight - (drawAreaHeight * 0.5 + drawAreaHeight * 0.15)
+        
+        let ellipse2RectOrigin = ellipse1RectOrigin.offsetBy(dx: ellipse2OffsetX, dy: ellipse2OffsetY)
+        let ellipse2RectSize = ellipse1RectSize
+        
+        let ellipse3RectOrigin = drawArea.offsetBy(dx: drawAreaWidth * 0.15, dy: 0)
+        let ellipse3RectSize = CGSize(width: drawAreaWidth * 0.6, height: drawAreaHeight * 0.6)
+        
+        let ellipse4OffsetX = 2 * drawAreaWidth * 0.15
+        let ellipse4OffsetY = drawAreaHeight - (drawAreaHeight * 0.6)
+        let ellipse4RectOrigin = drawArea.offsetBy(dx: ellipse4OffsetX, dy: ellipse4OffsetY)
+        let ellipse4RectSize = ellipse3RectSize
+        
+        let ellipse1 = UIBezierPath(ovalIn: CGRect(origin: ellipse1RectOrigin, size: ellipse1RectSize))
+        let ellipse2 = UIBezierPath(ovalIn: CGRect(origin: ellipse2RectOrigin, size: ellipse2RectSize))
+        let ellipse3 = UIBezierPath(ovalIn: CGRect(origin: ellipse3RectOrigin, size: ellipse3RectSize))
+        let ellipse4 = UIBezierPath(ovalIn: CGRect(origin: ellipse4RectOrigin, size: ellipse4RectSize))
         
         color.drawColor.setStroke()
-        path.stroke()
+        ellipse3.stroke()
+        ellipse4.stroke()
+        drawShading(forPath: ellipse3)
+        drawShading(forPath: ellipse4)
+        
+        #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setFill()
+        if let context = UIGraphicsGetCurrentContext() {
+            context.saveGState()
+            context.saveGState()
+            ellipse4.addClip()
+            #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setStroke()
+            ellipse3.stroke()
+            color.drawColor.setStroke()
+            ellipse2.stroke()
+            context.restoreGState()
+            ellipse3.addClip()
+            color.drawColor.setStroke()
+            ellipse1.stroke()
+            #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setStroke()
+            ellipse4.stroke()
+            context.restoreGState()
+        }
+        
+        ellipse1.fill()
+        ellipse2.fill()
+
     }
     
     private func drawDiamondPip(withinRect enclosingRect: CGRect) {
