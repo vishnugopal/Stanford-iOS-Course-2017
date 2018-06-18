@@ -128,27 +128,32 @@ class CardView: UIView {
         color.drawColor.setStroke()
         ellipse3.stroke()
         ellipse4.stroke()
-        drawShading(forPath: ellipse3)
-        drawShading(forPath: ellipse4)
-        
-        #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setFill()
+       
         if let context = UIGraphicsGetCurrentContext() {
             context.saveGState()
             context.saveGState()
             ellipse4.addClip()
             #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setStroke()
+            ellipse3.lineWidth = 1.3
             ellipse3.stroke()
             color.drawColor.setStroke()
+            ellipse2.lineWidth = 1.3
             ellipse2.stroke()
             context.restoreGState()
             ellipse3.addClip()
             color.drawColor.setStroke()
+            ellipse1.lineWidth = 1.3
             ellipse1.stroke()
             #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setStroke()
+            ellipse4.lineWidth = 1.3
             ellipse4.stroke()
             context.restoreGState()
         }
         
+        drawShading(forPath: ellipse3)
+        drawShading(forPath: ellipse4)
+        
+        #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).setFill()
         ellipse1.fill()
         ellipse2.fill()
 
