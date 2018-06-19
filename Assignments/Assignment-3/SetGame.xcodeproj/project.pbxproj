@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F50DCD7220D8FB0F00CBADFE /* PlayingDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50DCD7120D8FB0F00CBADFE /* PlayingDeckView.swift */; };
 		F51014BD20C8EE34009AABB6 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51014BC20C8EE34009AABB6 /* Grid.swift */; };
 		F51014BF20C8F069009AABB6 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51014BE20C8F069009AABB6 /* CardView.swift */; };
 		F5297F6820AD2F8F0081F401 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5297F6720AD2F8F0081F401 /* Card.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F50DCD7120D8FB0F00CBADFE /* PlayingDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingDeckView.swift; sourceTree = "<group>"; };
 		F51014BC20C8EE34009AABB6 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		F51014BE20C8F069009AABB6 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		F5297F6720AD2F8F0081F401 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Card.swift; path = SetGame/Card.swift; sourceTree = SOURCE_ROOT; };
@@ -75,6 +77,7 @@
 				F5297F6620AD2F2B0081F401 /* Supporting Files */,
 				F53F5FF720AD2ED600F3224D /* ViewController.swift */,
 				F51014BC20C8EE34009AABB6 /* Grid.swift */,
+				F50DCD7120D8FB0F00CBADFE /* PlayingDeckView.swift */,
 				F5297F6720AD2F8F0081F401 /* Card.swift */,
 				F51014BE20C8F069009AABB6 /* CardView.swift */,
 				F5297F6920AD48FA0081F401 /* SetGame.swift */,
@@ -161,6 +164,7 @@
 				F51014BD20C8EE34009AABB6 /* Grid.swift in Sources */,
 				F51014BF20C8F069009AABB6 /* CardView.swift in Sources */,
 				F53F5FF620AD2ED600F3224D /* AppDelegate.swift in Sources */,
+				F50DCD7220D8FB0F00CBADFE /* PlayingDeckView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
